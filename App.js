@@ -9,7 +9,8 @@ const multer = require('multer');
 app.use(cors());
 const AddData = require('./Database/AddData/AddData.js');
 const GetData = require('./Database/GetData/Getdata.js');
-mongoose.connect("mongodb://127.0.0.1:27017/StudentPortfolio").then(() => console.log('Connection sucessfull.....')).catch((err) => console.log(err));
+const { CreatePipeline } = require('./Database/Pipelines.js');
+mongoose.connect("mongodb+srv://21it097:SHDBqQQBa1YXvpA6@cluster0.leggcfd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(() => console.log('Connection sucessfull.....')).catch((err) => console.log(err));
 app.get('/', (req, res) => {
     console.log('Connected!!!!!!!!!!');
 });
@@ -66,6 +67,10 @@ app.get('/GetSkills/:id', async (req, res) => {
 });
 app.get('/SkillsList', async (req, res) => {
     const result = await GetData.GetSkillsList();
+    res.send(result);
+});
+app.get('/branch', async (req, res) => {
+    const result = await GetData.GetBranch();
     res.send(result);
 });
 app.get('/GetExprience/:id', async (req, res) => {

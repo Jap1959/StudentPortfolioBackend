@@ -41,6 +41,10 @@ const CompanyDetails = new mongoose.Schema({
     Role: String,
     Description: String,
 });
+const Branch = new mongoose.Schema({
+    id: Number,
+    name: String,
+});
 const ExperienceSchema = new mongoose.Schema({
     id: Number,
     Email: String,
@@ -65,4 +69,5 @@ const Experience = mongoose.model("Exprience", ExperienceSchema);
 const Project = mongoose.model("Project", ProjectSchema);
 const Company = mongoose.model("Company", CompanyDetails);
 const Skill = mongoose.model("Skill", Skills);
-module.exports = { user, BasicInfo, Experience, Project, Company, Skill };
+const Branches = mongoose.model("Branch", Branch);
+module.exports = { user, BasicInfo, Experience, Project, Company, Skill, Branches };

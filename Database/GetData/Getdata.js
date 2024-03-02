@@ -1,30 +1,31 @@
 const schema = require('../Schema');
 
-const GetHeaderSection = (id) => {
-
+const GetHeaderSection = async (id) => {
+    console.log(id);
     try {
-        const find = schema.user.find({ _id: id, Status: true });
-        if (find != null) {
-            const result = schema.BasicInfo.find({ Email: find.Email }).select('-Skills');
-            if (result != null) {
-                return { status: 200, Data: result };
-            } else {
-                return { status: 422, message: 'Try again Later' };
-            }
+        // const find = schema.user.find({ _id: id, Status: true });
+        // console.log(find);
+        // if (find != null) {
+        const result = await schema.BasicInfo.findOne({ Email: id }).select('-Skills');
+        if (result != null) {
+            return { status: 200, Data: result };
         } else {
-            return { status: 404, message: 'No Details Added!!' };
+            return { status: 422, message: 'Try again Later' };
         }
+        // } else {
+        //     return { status: 404, message: 'No Details Added!!' };
+        // }
     } catch (e) {
 
         console.log(e);
     }
 }
-const GetSkills = (id) => {
+const GetSkills = async (id) => {
 
     try {
-        const find = schema.user.find({ _id: id, Status: true });
+        const find = await schema.user.find({ _id: id });
         if (find != null) {
-            const result = schema.BasicInfo.find({ Email: find.Email }).select('Skills');
+            const result = await schema.BasicInfo.find({ Email: find.Email }).select('Skills');
             if (result != null) {
                 return { status: 200, Data: result };
             } else {
@@ -90,6 +91,20 @@ const GetSkillsList = async () => {
         console.log(e);
     }
 }
+const GetBranch = async () => {
+
+    try {
+        const result = await schema.Branches.find().sort({ name: 1 });
+        if (result != null) {
+            return { status: 200, Data: result };
+        } else {
+            return { status: 404, message: 'No Details Added!!' };
+        }
+    } catch (e) {
+
+        console.log(e);
+    }
+}
 const GetExprience = (id) => {
 
     try {
@@ -109,4 +124,4 @@ const GetExprience = (id) => {
         console.log(e);
     }
 }
-module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills, GetSkillsList };
+module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills, GetSkillsList, GetBranch };
