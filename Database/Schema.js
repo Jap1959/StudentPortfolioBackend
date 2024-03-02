@@ -17,8 +17,8 @@ const User = new mongoose.Schema({
     tokens: String,
 });
 const Skills = new mongoose.Schema({
-    SkillName: String,
-    Skillicon: String,
+    name: String,
+    src: String,
 });
 const BasicInfoSchema = new mongoose.Schema({
     Email: String,
@@ -32,7 +32,7 @@ const BasicInfoSchema = new mongoose.Schema({
     Codechef: String,
     Linkedin: String,
     Github: String,
-    Skills: [Number],
+    Skills: [String],
 });
 const CompanyDetails = new mongoose.Schema({
     CName: String,
@@ -42,24 +42,27 @@ const CompanyDetails = new mongoose.Schema({
     Description: String,
 });
 const ExperienceSchema = new mongoose.Schema({
+    id: Number,
     Email: String,
-    Company: [CompanyDetails],
+    CName: String,
+    DurationStart: Date,
+    DurationEnd: Date,
+    Role: String,
+    Description: String,
 });
-const ProjectDetails = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
+    id: Number,
+    Email: String,
     PName: String,
     TechnologyStack: String,
     Description: String,
     Github: String,
     Image: String,
 });
-const ProjectSchema = new mongoose.Schema({
-    Email: String,
-    Project: [ProjectDetails],
-});
 const user = mongoose.model("User", User);
 const BasicInfo = mongoose.model("BasicInfo", BasicInfoSchema);
 const Experience = mongoose.model("Exprience", ExperienceSchema);
-const ProjectDetail = mongoose.model("ProjectDetail", ProjectDetails);
 const Project = mongoose.model("Project", ProjectSchema);
 const Company = mongoose.model("Company", CompanyDetails);
-module.exports = { user, BasicInfo, Experience, Project, Company, ProjectDetail };
+const Skill = mongoose.model("Skill", Skills);
+module.exports = { user, BasicInfo, Experience, Project, Company, Skill };

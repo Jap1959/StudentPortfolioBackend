@@ -22,17 +22,18 @@ const storage = multer.diskStorage({
     },
 });
 const upload = multer({ storage });
-app.post('/AddAboutme', upload.array('file'), async (req, res) => {
+app.post('/AddAboutme', async (req, res) => {
     const data = req.body;
     const result = await AddData.AddAboutme(data);
     res.send(result);
 });
 app.post('/AddSkills', async (req, res) => {
     const data = req.body;
+    console.log(data);
     const result = await AddData.AddSkills(data);
     res.send(result);
 });
-app.post('/AddProjects', upload.array('file'), async (req, res) => {
+app.post('/AddProjects', async (req, res) => {
     const data = req.body;
     const result = await AddData.AddProject(data);
     res.send(result);
@@ -61,6 +62,10 @@ app.get('/GetHeaderSection/:id', async (req, res) => {
 app.get('/GetSkills/:id', async (req, res) => {
     const id = req.params.id;
     const result = await GetData.GetSkills(id);
+    res.send(result);
+});
+app.get('/SkillsList', async (req, res) => {
+    const result = await GetData.GetSkillsList();
     res.send(result);
 });
 app.get('/GetExprience/:id', async (req, res) => {

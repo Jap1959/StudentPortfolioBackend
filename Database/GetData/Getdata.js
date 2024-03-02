@@ -76,6 +76,20 @@ const GetProject = (id) => {
         console.log(e);
     }
 }
+const GetSkillsList = async () => {
+
+    try {
+        const result = await schema.Skill.find().sort({ name: 1 });
+        if (result != null) {
+            return { status: 200, Data: result };
+        } else {
+            return { status: 404, message: 'No Details Added!!' };
+        }
+    } catch (e) {
+
+        console.log(e);
+    }
+}
 const GetExprience = (id) => {
 
     try {
@@ -95,4 +109,4 @@ const GetExprience = (id) => {
         console.log(e);
     }
 }
-module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills };
+module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills, GetSkillsList };

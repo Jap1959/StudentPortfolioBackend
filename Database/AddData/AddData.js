@@ -21,7 +21,6 @@ const AddBasicInfo = async (data) => {
             Github: Github,
         })
         const result = await BasicIn.save();
-        console.log(result);
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
@@ -53,12 +52,16 @@ const UpdateBasicInfo = (data) => {
         console.log(e);
     }
 }
-const AddSkills = (data) => {
-    const { ids, Email } = data;
+const AddSkills = async (data) => {
+    const { Email, Skill } = data;
     try {
-        const result = Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
-            Skills: ids,
-        });
+        const result = await Schema.BasicInfo.findOneAndUpdate(
+            { Email: Email },
+            {
+                $set: { Skills: Skill },
+            }, { new: true },
+        );
+        console.log(result);
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
@@ -68,21 +71,15 @@ const AddSkills = (data) => {
         console.log(e);
     }
 }
-const AddExprience = (data) => {
-    const { Email, Company } = data;
+const AddExprience = async (data) => {
     try {
-        let Exprience = [];
-        Company.map((element, index) => {
-            const Company = Schema.Project({
-                Name: element.CName,
-                Role: element.CName,
-                Description: element.Description,
-            })
-            Exprience.add(Company);
-        })
-        const result = Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
-            Company: Exprience,
-        });
+        const result = await Schema.Experience.bulkWrite(data.map(doc => ({
+            updateOne: {
+                filter: { id: doc.id, Email: doc.Email },
+                update: { $set: doc },
+                upsert: true // Insert new document if id doesn't exist, update existing document if id already exists
+            }
+        })));
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
@@ -92,29 +89,16 @@ const AddExprience = (data) => {
         console.log(e);
     }
 }
-const AddProject = (data) => {
-    const { Email, ProjectList } = data;
+const AddProject = async (data) => {
     try {
-        let Projects = [];
-        ProjectList.map((element, index) => {
-            const Read = fs.readFileSync(`D:/Student_portfolio_backend/Uploads/Project${index}.txt`, 'utf8');
-            const Image = new Buffer(Read).toString('base64');
-            const ProjectElement = new Schema.ProjectDetail({
-                PName: element.PName,
-                TechnologyStack: element.TechnologyStack,
-                Github: element.Github,
-                Decription: element.Decription,
-                Image: Image,
-            })
-            fs.unlinkSync(`D:/Student_portfolio_backend/Uploads/Project${index}.txt`);
-            Projects.add(ProjectElement);
-        })
-        const ProjectS = new Schema.Project({
-            Email: Email,
-            Project: Projects,
 
-        })
-        const result = ProjectS.save();
+        const result = await Schema.Project.bulkWrite(data.map(doc => ({
+            updateOne: {
+                filter: { id: doc.id, Email: doc.Email },
+                update: { $set: doc },
+                upsert: true // Insert new document if id doesn't exist, update existing document if id already exists
+            }
+        })));
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
@@ -124,16 +108,13 @@ const AddProject = (data) => {
         console.log(e);
     }
 }
-const AddAboutme = (data) => {
-    const { Email, Description } = data;
+const AddAboutme = async (data) => {
+    const { Email, Description, Image } = data;
     try {
-        const Read = fs.readFileSync(`D:/Student_portfolio_backend/Uploads/${Email}.txt`);
-        const Image = new Buffer(Read).toString('base64');
-        const result = Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
+        const result = await Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
             Aboutme: Description,
             ProfilePic: Image,
         });
-        fs.unlinkSync(`D:/Student_portfolio_backend/Uploads/${Email}.txt`);
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
