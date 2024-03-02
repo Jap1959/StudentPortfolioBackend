@@ -1,7 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
+var cors = require('cors')
 const app = express();
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 const multer = require('multer');
+app.use(cors());
 const AddData = require('./Database/AddData/AddData.js');
 const GetData = require('./Database/GetData/Getdata.js');
 mongoose.connect("mongodb://127.0.0.1:27017/StudentPortfolio").then(() => console.log('Connection sucessfull.....')).catch((err) => console.log(err));

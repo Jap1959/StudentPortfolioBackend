@@ -2,14 +2,15 @@
 const Schema = require('../Schema');
 const fs = require('fs');
 const url = "http://localhost:3000/Portfolio/";
-const AddBasicInfo = (data) => {
+const AddBasicInfo = async (data) => {
+
     const { Name, Email, Role, Description, Linkedin, Leetcode, Codechef, Github } = data;
     try {
-        const find = Schema.BasicInfo.find({ Email: Email });
+        const find = await Schema.BasicInfo.findOne({ Email: Email });
         if (find != null) {
             return UpdateBasicInfo(data);
         }
-        const BasicInfo = new Schema.BasicInfo({
+        const BasicIn = new Schema.BasicInfo({
             Name: Name,
             Email: Email,
             Role: Role,
@@ -19,7 +20,8 @@ const AddBasicInfo = (data) => {
             Codechef: Codechef,
             Github: Github,
         })
-        const result = BasicInfo.save();
+        const result = await BasicIn.save();
+        console.log(result);
         if (result != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
