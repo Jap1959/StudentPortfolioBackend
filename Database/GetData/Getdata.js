@@ -105,6 +105,34 @@ const GetBranch = async () => {
         console.log(e);
     }
 }
+const GetSoftskill = async () => {
+
+    try {
+        const result = await schema.Softskill.find().sort({ name: 1 });
+        if (result != null) {
+            return { status: 200, Data: result };
+        } else {
+            return { status: 404, message: 'No Details Added!!' };
+        }
+    } catch (e) {
+
+        console.log(e);
+    }
+}
+const GetExam = async () => {
+
+    try {
+        const result = await schema.Exam.find().sort({ name: 1 });
+        if (result != null) {
+            return { status: 200, Data: result };
+        } else {
+            return { status: 404, message: 'No Details Added!!' };
+        }
+    } catch (e) {
+
+        console.log(e);
+    }
+}
 const GetExprience = (id) => {
 
     try {
@@ -124,4 +152,4 @@ const GetExprience = (id) => {
         console.log(e);
     }
 }
-module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills, GetSkillsList, GetBranch };
+module.exports = { GetAboutMe, GetExprience, GetHeaderSection, GetProject, GetSkills, GetSkillsList, GetBranch, GetSoftskill, GetExam };

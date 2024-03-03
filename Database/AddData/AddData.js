@@ -109,13 +109,39 @@ const AddProject = async (data) => {
     }
 }
 const AddAboutme = async (data) => {
-    const { Email, Description, Image } = data;
+    const { Email, Description, Image, Branch, CGPA } = data;
     try {
         const result = await Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
             Aboutme: Description,
             ProfilePic: Image,
+            CGPA: CGPA,
+            Branch: Branch,
         });
         if (result != null) {
+            return { status: 200, message: 'Sucessfully saved' };
+        } else {
+            return { status: 422, message: 'Complete Header Section' };
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+const AddSoftSkills = async (data) => {
+    const { Skill, ExamData, Email } = data;
+    try {
+        const result = await Schema.BasicInfo.findOneAndUpdate({ Email: Email }, {
+            $set: { Softskill: Skill },
+        }, {
+            new: true,
+        });
+        const result1 = await Schema.ExamS.bulkWrite(ExamData.map(doc => ({
+            updateOne: {
+                filter: { Name: doc.Name, Email: doc.Email },
+                update: { $set: doc },
+                upsert: true // Insert new document if id doesn't exist, update existing document if id already exists
+            }
+        })));
+        if (result != null && result1 != null) {
             return { status: 200, message: 'Sucessfully saved' };
         } else {
             return { status: 422, message: 'Complete Header Section' };
@@ -139,4 +165,4 @@ const AddComplete = (data) => {
         console.log(e);
     }
 }
-module.exports = { AddProject, AddSkills, AddExprience, AddBasicInfo, AddAboutme, AddComplete };
+module.exports = { AddProject, AddSkills, AddExprience, AddBasicInfo, AddAboutme, AddComplete, AddSoftSkills };

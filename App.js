@@ -9,11 +9,16 @@ const multer = require('multer');
 app.use(cors());
 const AddData = require('./Database/AddData/AddData.js');
 const GetData = require('./Database/GetData/Getdata.js');
-const { CreatePipeline } = require('./Database/Pipelines.js');
-mongoose.connect("mongodb+srv://21it097:SHDBqQQBa1YXvpA6@cluster0.leggcfd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(() => console.log('Connection sucessfull.....')).catch((err) => console.log(err));
+const updateExcel = require('./Update/Updateexcel.js');
+mongoose.connect("mongodb://127.0.0.1:27017/StudentPortfolio").then(() => console.log('Connection sucessfull.....')).catch((err) => console.log(err));
 app.get('/', (req, res) => {
     console.log('Connected!!!!!!!!!!');
 });
+updateExcel.UpdateExcelFileBasicinfo();
+updateExcel.UpdateExcelFileExprience();
+updateExcel.UpdateExcelFileSkills();
+updateExcel.UpdateExcelFileExams();
+updateExcel.UpdateExcelFileSoftSkills();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, `./uploads`);
@@ -30,8 +35,12 @@ app.post('/AddAboutme', async (req, res) => {
 });
 app.post('/AddSkills', async (req, res) => {
     const data = req.body;
-    console.log(data);
     const result = await AddData.AddSkills(data);
+    res.send(result);
+});
+app.post('/AddSoftSkills', async (req, res) => {
+    const data = req.body;
+    const result = await AddData.AddSoftSkills(data);
     res.send(result);
 });
 app.post('/AddProjects', async (req, res) => {
@@ -71,6 +80,14 @@ app.get('/SkillsList', async (req, res) => {
 });
 app.get('/branch', async (req, res) => {
     const result = await GetData.GetBranch();
+    res.send(result);
+});
+app.get('/SoftSkill', async (req, res) => {
+    const result = await GetData.GetSoftskill();
+    res.send(result);
+});
+app.get('/Exam', async (req, res) => {
+    const result = await GetData.GetExam();
     res.send(result);
 });
 app.get('/GetExprience/:id', async (req, res) => {

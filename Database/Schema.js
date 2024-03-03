@@ -32,7 +32,15 @@ const BasicInfoSchema = new mongoose.Schema({
     Codechef: String,
     Linkedin: String,
     Github: String,
+    Branch: String,
+    CGPA: String,
     Skills: [String],
+    Softskill: [String],
+});
+const Exams = new mongoose.Schema({
+    Email: String,
+    Name: String,
+    Score: String,
 });
 const CompanyDetails = new mongoose.Schema({
     CName: String,
@@ -54,6 +62,12 @@ const ExperienceSchema = new mongoose.Schema({
     Role: String,
     Description: String,
 });
+const SoftskillSchema = new mongoose.Schema({
+    name: String,
+});
+const ExamSchema = new mongoose.Schema({
+    name: String,
+});
 const ProjectSchema = new mongoose.Schema({
     id: Number,
     Email: String,
@@ -70,4 +84,7 @@ const Project = mongoose.model("Project", ProjectSchema);
 const Company = mongoose.model("Company", CompanyDetails);
 const Skill = mongoose.model("Skill", Skills);
 const Branches = mongoose.model("Branch", Branch);
-module.exports = { user, BasicInfo, Experience, Project, Company, Skill, Branches };
+const Softskill = mongoose.model("SoftSkill", SoftskillSchema);
+const Exam = mongoose.model("Exam", ExamSchema);
+const ExamS = mongoose.model("Exames", Exams);
+module.exports = { user, BasicInfo, Experience, Project, Company, Skill, Branches, Softskill, Exam, ExamS };
